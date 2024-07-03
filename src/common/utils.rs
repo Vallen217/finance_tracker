@@ -1,6 +1,6 @@
 use crate::{
-    read::CsvLines,
-    write::{CsvFields, ExpenseFields},
+    read_csv::CsvLines,
+    write_csv::{CsvFields, ExpenseFields},
 };
 
 use super::*;

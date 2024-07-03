@@ -1,11 +1,11 @@
 use common::utils;
-use read::CsvLines;
-use write::CsvFields;
+use read_csv::CsvLines;
+use write_csv::CsvFields;
 
 pub mod common;
 pub mod display;
-pub mod read;
-pub mod write;
+pub mod read_csv;
+pub mod write_csv;
 
 fn main() {
     let file_path =
@@ -13,10 +13,10 @@ fn main() {
     let mut csv_lines = utils::instantiate_csv_lines(true);
     let mut csv_fields = utils::instantiate_csv_fields();
 
-    let _ = CsvLines::compile_csv_lines(&mut csv_lines, &mut csv_fields);
-    let _ = CsvFields::get_new_data(&mut csv_fields);
-    let _ = CsvFields::write_csv_line(csv_fields, file_path);
-    dbg!("{:?}", &csv_lines);
+    let _ = CsvLines::compile_csv(&mut csv_lines, &mut csv_fields);
+    let _ = CsvFields::compile_input(&mut csv_fields);
+    let _ = CsvFields::write_csv(csv_fields, file_path);
+    // dbg!("{:?}", &csv_lines);
 
     // TODO: add menu
     // let operation: string = io
