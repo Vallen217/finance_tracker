@@ -1,7 +1,7 @@
 use super::*;
 
 impl CsvLines {
-    pub fn compile_csv(&mut self, mut csv_fields: &mut CsvFields) -> Result<(), Box<dyn Error>> {
+    pub fn compile_csv(&mut self) -> Result<CsvFields, Box<dyn Error>> {
         // self.lines.clear();
 
         let csv_reader = csv::ReaderBuilder::new()
@@ -13,11 +13,11 @@ impl CsvLines {
             self.lines.push(record);
         }
 
-        self.parse_csv_line(&mut csv_fields);
-        Ok(())
+        let csv_fields = self.parse_csv_line(utils::instantiate_csv_fields());
+        Ok(csv_fields)
     }
 
-    fn parse_csv_line(&mut self, csv_fields: &mut CsvFields) {
+    fn parse_csv_line(&mut self, mut csv_fields: CsvFields) -> CsvFields {
         for line in &self.lines {
             let mut iter = 0;
             for val in line {
@@ -38,8 +38,10 @@ impl CsvLines {
                 iter += 1;
             }
         }
-        println!("{:?}", csv_fields.expense);
+        // println!("{:?}", csv_fields.expense);
         // println!("{:?}", csv_fields);
+
+        csv_fields
     }
 }
 
@@ -91,9 +93,8 @@ mod unit_tests {
 
     #[test]
     fn test_expense_fields() {
-        let mut csv_lines = utils::instantiate_csv_lines(true);
-        let mut csv_fields = utils::instantiate_csv_fields();
-        let _ = CsvLines::compile_csv(&mut csv_lines, &mut csv_fields).unwrap();
+        let mut csv_lines = utils::instantiate_csv_lines(None);
+        let csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
 
         let expected_expense_2: f32 = 65.52;
         let expected_expense_5: f32 = 90.83;
@@ -109,9 +110,8 @@ mod unit_tests {
 
     #[test]
     fn test_csv_fields() {
-        let mut csv_lines = utils::instantiate_csv_lines(true);
-        let mut csv_fields = utils::instantiate_csv_fields();
-        let _ = CsvLines::compile_csv(&mut csv_lines, &mut csv_fields).unwrap();
+        let mut csv_lines = utils::instantiate_csv_lines(None);
+        let csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
 
         let expected_date_0 = String::from("2024-06-07");
         let expected_g_expense_3: f32 = 254.66;
@@ -128,9 +128,8 @@ mod unit_tests {
 
     #[test]
     fn test_csv_lines() {
-        let mut csv_lines = utils::instantiate_csv_lines(true);
-        let mut csv_fields = utils::instantiate_csv_fields();
-        let _ = CsvLines::compile_csv(&mut csv_lines, &mut csv_fields).unwrap();
+        let mut csv_lines = utils::instantiate_csv_lines(None);
+        let _csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
 
         let expected_csv_line_2: StringRecord = StringRecord::from(vec![
             "2024-06-18",

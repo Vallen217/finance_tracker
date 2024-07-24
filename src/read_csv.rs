@@ -1,6 +1,7 @@
 pub mod compile_csv;
 
 use super::write_csv::{CsvFields, ExpenseFields};
+#[allow(unused_imports)]
 use crate::common::utils;
 use csv::{self, StringRecord};
 use std::error::Error;

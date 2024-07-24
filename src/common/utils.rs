@@ -1,15 +1,4 @@
-use crate::{
-    read_csv::CsvLines,
-    write_csv::{CsvFields, ExpenseFields},
-};
-
 use super::*;
-
-pub struct Date {
-    pub year: i16,
-    pub month: i16,
-    pub day: i16,
-}
 
 impl Date {
     pub fn current_date() -> Date {
@@ -36,6 +25,7 @@ impl Date {
         date
     }
 }
+
 pub fn csv_date_form() -> String {
     let date = Date::current_date();
 
@@ -80,11 +70,12 @@ pub fn instantiate_expense_fields() -> ExpenseFields {
     expense_fields
 }
 
-pub fn instantiate_csv_lines(test: bool) -> CsvLines {
-    let file_path = if test {
-        String::from("/home/vallen/Workspace/finance_tracker/test_files/good_files/file_1.csv")
-    } else {
-        String::new()
+pub fn instantiate_csv_lines(path: Option<String>) -> CsvLines {
+    let file_path = match path {
+        Some(file_path) => file_path,
+        None => {
+            String::from("/home/vallen/Workspace/finance_tracker/test_files/good_files/file_1.csv")
+        }
     };
     let csv_lines = CsvLines {
         file_path,
@@ -92,12 +83,6 @@ pub fn instantiate_csv_lines(test: bool) -> CsvLines {
     };
 
     csv_lines
-}
-
-pub fn pad_word(word: &str) -> String {
-    let spaces = 16 - word.len();
-    let padding = " ".repeat(spaces);
-    padding
 }
 
 #[allow(dead_code)]

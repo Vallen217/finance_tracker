@@ -1,5 +1,7 @@
 use common::utils;
+use display::display::display_file;
 use read_csv::CsvLines;
+use std::{io, process::exit};
 use write_csv::CsvFields;
 
 pub mod common;
@@ -8,20 +10,47 @@ pub mod read_csv;
 pub mod write_csv;
 
 fn main() {
-    let file_path =
-        String::from("/home/vallen/Workspace/finance_tracker/test_files/good_files/file_1.csv");
-    let mut csv_lines = utils::instantiate_csv_lines(true);
-    let mut csv_fields = utils::instantiate_csv_fields();
+    let path =
+        String::from("/home/vallen/Workspace/finance_tracker/test_files/good_files/file_3.csv");
+    // let pathing = Pathing::generate_file_path(&Date::current_date(), true).unwrap();
+    let mut csv_lines = utils::instantiate_csv_lines(Some(path.clone()));
+    let mut csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
+    let _ = CsvFields::write_csv(&mut csv_fields, path);
 
-    let _ = CsvLines::compile_csv(&mut csv_lines, &mut csv_fields);
-    let _ = CsvFields::compile_input(&mut csv_fields);
-    let _ = CsvFields::write_csv(csv_fields, file_path);
-    // dbg!("{:?}", &csv_lines);
+    // TODO:
+    // display previous file
+    // display aggregated expense commodities
 
-    // TODO: add menu
-    // let operation: string = io
-    // add line
-    // remove line
-    // display file
-    // aggregate expense commodities
+    println!(
+        "\n\n(mf) - Modify the current file\
+        \n(df) - Display the current file\
+        \n(q)  - Quit the program\
+        \n\nOperation:"
+    );
+
+    loop {
+        let mut oper = String::new();
+        io::stdin().read_line(&mut oper).unwrap();
+
+        if oper.trim() == "mf" {
+            println!(
+                "\n\n(rl#)  - Remove the last # file entry\
+                \n(rlq#) - Remove the last # file entry and quit\
+                \n(q)    - Quit the loop\
+                \nPress any key to continue"
+            );
+
+            let csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
+            return write_csv::mod_file::mod_file(csv_fields, csv_lines.file_path.clone());
+        }
+
+        if oper.trim() == "df" {
+            display_file(csv_lines.file_path.clone());
+        }
+
+        if oper.trim() == "q" {
+            println!("");
+            exit(0);
+        }
+    }
 }

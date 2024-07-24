@@ -1,24 +1,16 @@
-use super::Pathing;
 use super::*;
 
 impl Pathing {
-    pub fn generate_file_path(
-        date: &utils::Date,
-        create_file: bool,
-    ) -> Result<Pathing, Box<dyn Error>> {
+    pub fn generate_file_path(date: &Date, create_file: bool) -> Result<Pathing, Box<dyn Error>> {
         let user_dir = match dirs::home_dir() {
             Some(dir) => dir,
             None => panic!("Error: unable to determine $HOME directory"),
         };
-        let parent_dir = format!(
-            "{}/Documents/Health/Macronutritional_Intake",
-            user_dir.to_str().unwrap()
-        );
+        let parent_dir = format!("{}/Documents/Finance/Records", user_dir.to_str().unwrap());
 
         let pathing = Pathing {
             year_path: format!("{parent_dir}/{}", date.year),
-            month_path: format!("{parent_dir}/{}/{}", date.year, date.month),
-            day_path: format!("{parent_dir}/{}/{}/{}.txt", date.year, date.month, date.day),
+            month_path: format!("{parent_dir}/{}/{}.csv", date.year, date.month),
         };
 
         if create_file {
@@ -28,18 +20,18 @@ impl Pathing {
     }
 
     pub fn create_file(&self) -> Result<(), Box<dyn Error>> {
-        fs::create_dir_all(&self.month_path)?;
+        fs::create_dir_all(&self.year_path)?;
 
         let _ = fs::OpenOptions::new()
             .write(true)
             .create_new(true)
-            .open(&self.day_path)?;
+            .open(&self.month_path);
 
         Ok(())
     }
 }
 
-pub fn file_exists(path: &String) -> bool {
+pub fn file_exists(path: String) -> bool {
     path::Path::new(&path).exists()
 }
 
@@ -52,7 +44,6 @@ pub fn user_path() -> Result<String, Box<dyn Error>> {
     Ok(dir_path.to_str().unwrap().to_string())
 }
 
-// NOTE: It won't be necessary to get the 'day' segment.
 pub fn user_input_pathing(
     parent_directory: String,
     date_type: &str,
@@ -67,22 +58,14 @@ pub fn user_input_pathing(
     let mut path = String::new();
     io::stdin().read_line(&mut path)?;
 
-    let mut formatted_path = format!("{}/{}", parent_directory, &path[0..path.len() - 1]);
-
-    if date_type.contains("day") || date_type.contains("pd file") {
-        if path.contains(".txt") {
-            formatted_path = format!("{}/{}", parent_directory, &path[0..path.len() - 1]);
-        } else {
-            formatted_path = format!("{}/{}.txt", parent_directory, &path[0..path.len() - 1]);
-        }
-    }
+    let formatted_path = format!("{}/{}", parent_directory, &path[0..path.len() - 1]);
 
     // for user to quit prematurely
     if formatted_path.contains("q") {
         process::exit(0);
     }
 
-    if !file_exists(&formatted_path) {
+    if !file_exists(formatted_path.clone()) {
         println!("\nError: Invalid selection");
         return user_input_pathing(parent_directory, date_type);
     }
@@ -104,11 +87,9 @@ mod unit_tests {
         };
         let month_path = month_path.to_str().unwrap().to_string();
 
-        let day_path = format!("{}/file_1.csv", month_path);
         let test_pathing = Pathing {
             year_path: "none".to_string(),
             month_path,
-            day_path,
         };
 
         test_pathing
@@ -125,6 +106,6 @@ mod unit_tests {
     fn test_file_exits() {
         let test_pathing = instantiate_test_paths();
 
-        assert!(file_exists(&test_pathing.day_path));
+        assert!(file_exists(test_pathing.month_path));
     }
 }
