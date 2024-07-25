@@ -2,7 +2,7 @@ use super::*;
 
 impl CsvLines {
     pub fn compile_csv(&mut self) -> Result<CsvFields, Box<dyn Error>> {
-        // self.lines.clear();
+        self.lines.clear();
 
         let csv_reader = csv::ReaderBuilder::new()
             .has_headers(true)
@@ -38,8 +38,6 @@ impl CsvLines {
                 iter += 1;
             }
         }
-        // println!("{:?}", csv_fields.expense);
-        // println!("{:?}", csv_fields);
 
         csv_fields
     }

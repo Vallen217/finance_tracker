@@ -1,31 +1,28 @@
 use super::*;
-// use crate::common::{utils, Date, Pathing};
-use crate::read_csv::CsvLines;
-use regex::Regex;
 
-pub fn mod_file(mut fields: CsvFields, file_path: String) {
+pub fn mod_file(mut fields: CsvFields, path: String) {
     let mut oper = String::new();
     match io::stdin().read_line(&mut oper) {
         Ok(oper) => oper,
         Err(_) => {
             println!("Error: unable to read operation '{}'", &oper);
-            return mod_file(fields, file_path.clone());
+            return mod_file(fields, path.clone());
         }
     };
 
     let re = Regex::new(r"rlq?[0-9]*").unwrap();
     if re.is_match(&oper) {
-        remove_lines(&mut fields, file_path.clone(), oper.clone())
+        remove_lines(&mut fields, path.clone(), oper.clone())
     }
 
     if oper.contains("q") {
-        display_file(file_path.clone());
+        display_file(path.clone());
     } else {
-        let _ = CsvFields::compile_input(&mut fields);
+        let _ = CsvFields::compile_input(&mut fields, path);
     }
 }
 
-fn remove_lines(fields: &mut CsvFields, file_path: String, oper: String) {
+fn remove_lines(fields: &mut CsvFields, path: String, oper: String) {
     loop {
         let iter: i8 = if oper.contains("q") {
             // remove 1 file line if the number of lines to remove is not specified.
@@ -59,8 +56,8 @@ fn remove_lines(fields: &mut CsvFields, file_path: String, oper: String) {
             let _ = delete_last_line(fields);
         }
 
-        let _ = CsvFields::compile_input(fields);
-        let _ = CsvFields::write_csv(fields, file_path.clone());
+        let _ = CsvFields::compile_input(fields, path.clone());
+        let _ = CsvFields::write_csv(fields, path.clone());
     }
 }
 

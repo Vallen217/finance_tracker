@@ -1,16 +1,16 @@
 use super::*;
 
 impl CsvFields {
-    pub fn compile_input(&mut self) -> Result<(), Box<dyn Error>> {
+    pub fn compile_input(&mut self, path: String) -> Result<(), Box<dyn Error>> {
         let date = csv_date_form();
         self.date.push(date);
 
-        self.input_csv_field("Expense: ")?;
+        self.input_csv_field("Expense: ", &path)?;
         // Skip commodity if expense is skipped.
         if self.expense.expense[self.expense.expense.len() - 1] != 0.0 {
-            self.input_csv_field("Commodity: ")?;
+            self.input_csv_field("Commodity: ", &path)?;
         }
-        self.input_csv_field("Income: ")?;
+        self.input_csv_field("Income: ", &path)?;
 
         let g_expense = Self::calc_field_vals(self.expense.expense.clone());
         let g_income = Self::calc_field_vals(self.income.clone());
@@ -20,10 +20,12 @@ impl CsvFields {
         self.gross_income.push(g_income);
         self.net_income.push(n_income);
 
+        self.write_csv(path)?;
+        // TODO: return mod_file
         Ok(())
     }
 
-    fn input_csv_field(&mut self, input_prompt: &str) -> Result<(), Box<dyn Error>> {
+    fn input_csv_field(&mut self, input_prompt: &str, path: &String) -> Result<(), Box<dyn Error>> {
         println!("\n{}", input_prompt);
         let mut field_input = String::new();
         io::stdin().read_line(&mut field_input)?;
@@ -41,7 +43,7 @@ impl CsvFields {
             if self.income.len() != sync_fields {
                 self.income.pop();
             }
-            return self.compile_input();
+            return self.compile_input(path.to_owned());
         }
 
         match input_prompt {

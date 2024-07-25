@@ -12,7 +12,6 @@ pub mod write_csv;
 fn main() {
     let path =
         String::from("/home/vallen/Workspace/finance_tracker/test_files/good_files/file_3.csv");
-    // let pathing = Pathing::generate_file_path(&Date::current_date(), true).unwrap();
     let mut csv_lines = utils::instantiate_csv_lines(Some(path.clone()));
     let mut csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
     let _ = CsvFields::write_csv(&mut csv_fields, path);

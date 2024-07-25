@@ -66,11 +66,13 @@ pub fn longest_field_len(field: Vec<f32>) -> usize {
 }
 
 pub fn longest_commodity(expense: Vec<f32>, commodity: Vec<String>) -> usize {
-    let mut iter_len = vec![];
+    let mut longest_iter: usize = 0;
     for i in 0..expense.len() {
         let e_fields = format!("${:.2}: {}", expense[i], commodity[i]);
-        iter_len.push(e_fields.len());
+        if e_fields.len() > longest_iter {
+            longest_iter = e_fields.len();
+        }
     }
 
-    iter_len[iter_len.len() - 1] + 1
+    longest_iter + 1
 }
