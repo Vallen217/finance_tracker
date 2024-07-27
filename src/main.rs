@@ -1,4 +1,4 @@
-use common::utils;
+use common::{utils, Date, Pathing};
 use display::display::display_file;
 use read_csv::CsvLines;
 use std::{io, process::exit};
@@ -9,9 +9,9 @@ pub mod read_csv;
 pub mod write_csv;
 
 fn main() {
-    let path =
-        String::from("/home/vallen/Workspace/finance_tracker/test_files/good_files/file_3.csv");
-    let mut csv_lines = utils::instantiate_csv_lines(Some(path.clone()));
+    let date = Date::current_date();
+    let path = Pathing::generate_file_path(&date, true).unwrap();
+    let mut csv_lines = utils::instantiate_csv_lines(Some(path.month_path));
 
     // TODO:
     // display previous file
