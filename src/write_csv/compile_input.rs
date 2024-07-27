@@ -23,13 +23,11 @@ impl CsvFields {
         self.net_income.push(n_income);
 
         self.write_csv(path)?;
-        // TODO: return mod_file
         Ok(crate::main())
     }
 
     fn input_csv_field(&mut self, input_prompt: &str, path: &String) -> Result<(), Box<dyn Error>> {
         println!("\n{}", input_prompt);
-        // TODO: remove loop. take 2/3 inputs as float
         let mut field_input = String::new();
         io::stdin().read_line(&mut field_input)?;
         let no_input: bool = field_input.trim().is_empty();

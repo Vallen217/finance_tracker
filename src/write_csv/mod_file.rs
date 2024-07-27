@@ -1,3 +1,5 @@
+use std::fs;
+
 use super::*;
 
 pub fn mod_file(mut fields: CsvFields, path: String) {
@@ -12,7 +14,7 @@ pub fn mod_file(mut fields: CsvFields, path: String) {
 
     let re = Regex::new(r"rlq?[0-9]*").unwrap();
     if re.is_match(&oper) {
-        remove_lines(&mut fields, oper.clone());
+        remove_lines(&mut fields, path.clone(), oper.clone());
         let _ = CsvFields::write_csv(&mut fields, path.clone());
         return crate::main();
     }
@@ -25,7 +27,7 @@ pub fn mod_file(mut fields: CsvFields, path: String) {
     }
 }
 
-fn remove_lines(fields: &mut CsvFields, oper: String) {
+fn remove_lines(fields: &mut CsvFields, path: String, oper: String) {
     loop {
         let iter: i8 = if oper.contains("q") {
             // remove 1 file line if the number of lines to remove is not specified.
@@ -57,6 +59,10 @@ fn remove_lines(fields: &mut CsvFields, oper: String) {
 
         for _ in 0..iter {
             let _ = delete_last_line(fields);
+        }
+
+        if fields.date.len() == 0 {
+            fs::remove_file(path).unwrap();
         }
 
         return;

@@ -24,7 +24,7 @@ impl CsvFields {
             .as_str(),
             " Income",
             format!("{}{}", pad("gross income", i_field_pad + 6), "Gross Income").as_str(),
-            " Net Expense",
+            " Net Income",
         ])?;
 
         for i in 0..self.date.len() {
