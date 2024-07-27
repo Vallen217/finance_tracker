@@ -12,17 +12,20 @@ pub fn mod_file(mut fields: CsvFields, path: String) {
 
     let re = Regex::new(r"rlq?[0-9]*").unwrap();
     if re.is_match(&oper) {
-        remove_lines(&mut fields, path.clone(), oper.clone())
+        remove_lines(&mut fields, oper.clone());
+        let _ = CsvFields::write_csv(&mut fields, path.clone());
+        return crate::main();
     }
 
-    if oper.contains("q") {
+    if oper.trim() == "q" {
         display_file(path.clone());
+        return crate::main();
     } else {
         let _ = CsvFields::compile_input(&mut fields, path);
     }
 }
 
-fn remove_lines(fields: &mut CsvFields, path: String, oper: String) {
+fn remove_lines(fields: &mut CsvFields, oper: String) {
     loop {
         let iter: i8 = if oper.contains("q") {
             // remove 1 file line if the number of lines to remove is not specified.
@@ -56,8 +59,7 @@ fn remove_lines(fields: &mut CsvFields, path: String, oper: String) {
             let _ = delete_last_line(fields);
         }
 
-        let _ = CsvFields::compile_input(fields, path.clone());
-        let _ = CsvFields::write_csv(fields, path.clone());
+        return;
     }
 }
 

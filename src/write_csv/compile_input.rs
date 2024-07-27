@@ -9,6 +9,8 @@ impl CsvFields {
         // Skip commodity if expense is skipped.
         if self.expense.expense[self.expense.expense.len() - 1] != 0.0 {
             self.input_csv_field("Commodity: ", &path)?;
+        } else {
+            self.expense.commodity.push(String::from(""));
         }
         self.input_csv_field("Income: ", &path)?;
 
@@ -22,11 +24,12 @@ impl CsvFields {
 
         self.write_csv(path)?;
         // TODO: return mod_file
-        Ok(())
+        Ok(crate::main())
     }
 
     fn input_csv_field(&mut self, input_prompt: &str, path: &String) -> Result<(), Box<dyn Error>> {
         println!("\n{}", input_prompt);
+        // TODO: remove loop. take 2/3 inputs as float
         let mut field_input = String::new();
         io::stdin().read_line(&mut field_input)?;
         let no_input: bool = field_input.trim().is_empty();

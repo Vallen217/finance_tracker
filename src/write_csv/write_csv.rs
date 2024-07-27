@@ -48,6 +48,7 @@ impl CsvFields {
             csv_write.flush()?;
         }
 
+        display_file(file_path);
         Ok(())
     }
 }
