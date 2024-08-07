@@ -1,6 +1,5 @@
-use std::fs;
-
 use super::*;
+use std::fs;
 
 pub fn mod_file(mut fields: CsvFields, path: String) {
     let mut oper = String::new();
@@ -29,30 +28,15 @@ pub fn mod_file(mut fields: CsvFields, path: String) {
 
 fn remove_lines(fields: &mut CsvFields, path: String, oper: String) {
     loop {
-        let iter: i8 = if oper.contains("q") {
-            // remove 1 file line if the number of lines to remove is not specified.
-            if &oper.trim().len() < &4 {
-                1
-            } else {
-                match oper.clone().trim()[3..].parse() {
-                    Ok(data) => data,
-                    Err(error) => {
-                        dbg!(error);
-                        panic!("Error: parsing operation '{}'", oper);
-                    }
-                }
-            }
+        // remove 1 file line if the number of lines to remove is not specified.
+        let iter: i8 = if &oper.trim().len() < &3 {
+            1
         } else {
-            // remove 1 file line if the number of lines to remove is not specified.
-            if &oper.trim().len() < &3 {
-                1
-            } else {
-                match oper.clone().trim()[2..].parse() {
-                    Ok(data) => data,
-                    Err(error) => {
-                        dbg!(error);
-                        panic!("Error: parsing operation '{}'", oper);
-                    }
+            match oper.clone().trim()[2..].parse() {
+                Ok(data) => data,
+                Err(error) => {
+                    dbg!(error);
+                    panic!("Error: parsing operation '{}'", oper);
                 }
             }
         };
@@ -70,6 +54,10 @@ fn remove_lines(fields: &mut CsvFields, path: String, oper: String) {
 }
 
 fn delete_last_line(fields: &mut CsvFields) -> Result<(), Box<dyn Error>> {
+    if fields.date.is_empty() {
+        return Ok(crate::main());
+    }
+
     fields.date.pop();
     fields.expense.expense.pop();
     fields.expense.commodity.pop();

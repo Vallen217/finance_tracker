@@ -17,21 +17,20 @@ fn main() {
     // display previous file
     // display aggregated expense commodities
 
-    println!(
-        "\n(mf) - Modify the current file\
+    loop {
+        println!(
+            "\n(mf) - Modify the current file\
         \n(df) - Display the current file\
         \n(q)  - Quit the program\
         \n\nOperation:"
-    );
+        );
 
-    loop {
         let mut oper = String::new();
         io::stdin().read_line(&mut oper).unwrap();
 
         if oper.trim() == "mf" {
             println!(
                 "\n\n(rl#)  - Remove the last # file entry\
-                \n(rlq#) - Remove the last # file entry and quit\
                 \n(q)    - Quit file modification\
                 \nPress any key to continue"
             );
