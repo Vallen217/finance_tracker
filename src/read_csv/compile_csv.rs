@@ -21,7 +21,7 @@ impl CsvLines {
         for line in &self.lines {
             let mut iter = 0;
             for val in line {
-                let str_val = val.trim().clone();
+                let str_val = val.trim();
 
                 match iter {
                     0 => csv_fields.date.push(str_val.to_string()),

@@ -1,5 +1,5 @@
 use common::{utils, Date, Pathing};
-use display::display::display_file;
+use display::display::{display_file, expense_distr};
 use read_csv::CsvLines;
 use std::{io, process::exit};
 
@@ -41,6 +41,8 @@ fn main() {
 
         if oper.trim() == "df" {
             display_file(csv_lines.file_path.clone());
+            let csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
+            expense_distr(csv_fields)
         }
 
         if oper.trim() == "q" {

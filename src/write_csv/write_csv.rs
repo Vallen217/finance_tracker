@@ -54,7 +54,7 @@ impl CsvFields {
 }
 
 pub fn pad(word: &str, char_len: usize) -> String {
-    let spaces = char_len - word.clone().len();
+    let spaces = char_len - word.len();
     let padding = " ".repeat(spaces);
     padding
 }
