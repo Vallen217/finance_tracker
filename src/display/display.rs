@@ -1,6 +1,4 @@
 use super::*;
-use crate::write_csv;
-use std::collections::HashMap;
 
 pub fn display_file(path: String) {
     match fs::read_to_string(&path) {
