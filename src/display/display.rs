@@ -10,7 +10,7 @@ pub fn display_file(path: String) {
     }
 }
 
-pub fn expense_distr(csv_fields: write_csv::CsvFields) {
+pub fn display_e_distr(csv_fields: write_csv::CsvFields) {
     let mut values: HashMap<&String, f32> = HashMap::new();
 
     for (i, val) in csv_fields.expense.commodity.iter().enumerate() {
@@ -46,7 +46,7 @@ pub fn expense_distr(csv_fields: write_csv::CsvFields) {
     let g_i = csv_fields.gross_income.last().unwrap_or(&0.0);
 
     print!(
-        "\nPercentile Income Distribution\nProfit: {:.2}%, ",
+        "\n\nPercentile Income Distribution\nProfit: {:.2}%, ",
         (100.0 / (g_e + g_i) * g_i)
     );
     for (key, val) in values.iter() {
