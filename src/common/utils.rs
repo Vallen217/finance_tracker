@@ -85,6 +85,19 @@ pub fn instantiate_csv_lines(path: Option<String>) -> CsvLines {
     csv_lines
 }
 
+// NOTE: 'map' is cloned during the implementations of this function in a 'for loop'.
+// As such this is a relativly costly function to implement.
+pub fn get_value_key(value: &f32, mut map: HashMap<&String, f32>) -> String {
+    let mut value_key = String::new();
+    for key in map.clone().keys() {
+        if map.remove(key).unwrap() == *value {
+            value_key = key.to_string();
+        }
+    }
+
+    value_key
+}
+
 #[allow(dead_code)]
 pub fn user_test_path() -> String {
     let dir_path = match fs::canonicalize("..") {

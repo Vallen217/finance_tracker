@@ -15,7 +15,6 @@ fn main() {
 
     // TODO:
     // display previous file
-    // display aggregated expense commodities
 
     loop {
         println!(

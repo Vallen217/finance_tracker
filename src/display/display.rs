@@ -29,10 +29,19 @@ pub fn display_e_distr(csv_fields: write_csv::CsvFields) {
         values.remove(&String::from(""));
     }
 
-    println!("Aggregated Expense Distribution");
+    // Display values in descending order
+    let mut desc_vals: Vec<f32> = vec![];
+    for val in values.values() {
+        desc_vals.push(val.clone());
+    }
+    desc_vals.sort_by(|a, b| b.partial_cmp(a).unwrap());
+
+    println!("Aggregated Expense Values");
     let mut newline = 0;
-    for (key, val) in values.iter() {
+    for (i, val) in desc_vals.iter().enumerate() {
+        let key = utils::get_value_key(&desc_vals[i], values.clone());
         newline += 1;
+
         if newline == 4 {
             newline = 0;
             println!("{}: ${:.2}, ", key, val);
@@ -46,19 +55,20 @@ pub fn display_e_distr(csv_fields: write_csv::CsvFields) {
     let g_i = csv_fields.gross_income.last().unwrap_or(&0.0);
 
     print!(
-        "\n\nPercentile Income Distribution\nProfit: {:.2}%, ",
+        "\n\nIncome Distribution\nProfit: {:.2}%, ",
         (100.0 / (g_e + g_i) * g_i)
     );
-    for (key, val) in values.iter() {
+    for (i, val) in desc_vals.iter().enumerate() {
+        let per_key = utils::get_value_key(&desc_vals[i], values.clone());
         newline += 1;
 
         let per_val = (100.0 / (g_e + g_i)) * val;
 
         if newline == 4 {
             newline = 0;
-            println!("{}: {:.2}%, ", key, per_val);
+            println!("{}: {:.2}%, ", per_key, per_val);
         } else {
-            print!("{}: {:.2}%, ", key, per_val);
+            print!("{}: {:.2}%, ", per_key, per_val);
         }
     }
     println!("");
