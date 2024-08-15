@@ -10,7 +10,7 @@ pub fn display_file(path: String) {
     }
 }
 
-pub fn display_e_distr(csv_fields: write_csv::CsvFields) {
+pub fn display_distr(csv_fields: write_csv::CsvFields) {
     let mut values: HashMap<&String, f32> = HashMap::new();
 
     for (i, val) in csv_fields.expense.commodity.iter().enumerate() {
@@ -39,7 +39,7 @@ pub fn display_e_distr(csv_fields: write_csv::CsvFields) {
     println!("Aggregated Expense Values");
     let mut newline = 0;
     for (i, val) in desc_vals.iter().enumerate() {
-        let key = utils::get_value_key(&desc_vals[i], values.clone());
+        let key = utils::get_value_key(&desc_vals[i], &values);
         newline += 1;
 
         if newline == 4 {
@@ -59,7 +59,7 @@ pub fn display_e_distr(csv_fields: write_csv::CsvFields) {
         (100.0 / (g_e + g_i) * g_i)
     );
     for (i, val) in desc_vals.iter().enumerate() {
-        let per_key = utils::get_value_key(&desc_vals[i], values.clone());
+        let per_key = utils::get_value_key(&desc_vals[i], &values);
         newline += 1;
 
         let per_val = (100.0 / (g_e + g_i)) * val;
