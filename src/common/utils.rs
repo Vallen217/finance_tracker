@@ -71,10 +71,14 @@ pub fn instantiate_expense_fields() -> ExpenseFields {
 }
 
 pub fn instantiate_csv_lines(path: Option<String>) -> CsvLines {
+    let parent_dir = env::current_dir().unwrap();
     let file_path = match path {
         Some(file_path) => file_path,
         None => {
-            String::from("/home/vallen/Workspace/finance_tracker/test_files/good_files/file_1.csv")
+            format!(
+                "{}/test_files/good_files/file_1.csv",
+                parent_dir.to_str().unwrap()
+            )
         }
     };
     let csv_lines = CsvLines {

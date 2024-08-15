@@ -7,7 +7,6 @@ pub mod common;
 pub mod display;
 pub mod read_csv;
 pub mod write_csv;
-
 fn main() {
     let date = Date::current_date();
     let path = Pathing::generate_file_path(&date, true).unwrap();

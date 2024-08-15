@@ -8,6 +8,7 @@ use crate::{
 use chrono::Local;
 use dirs;
 use std::collections::HashMap;
+use std::env;
 use std::{error::Error, fs, io, path, process};
 
 #[derive(Debug)]
