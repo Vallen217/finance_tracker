@@ -58,7 +58,17 @@ pub fn user_input_pathing(
     let mut path = String::new();
     io::stdin().read_line(&mut path)?;
 
-    let formatted_path = format!("{}/{}", parent_directory, &path[0..path.len() - 1]);
+    // This should be in an 'else' block, but the compiler can't find the variable in scope
+    // unless it's declared outright like this. And I dont care enough to fix it right now.
+    let mut formatted_path = format!("{}/{}", parent_directory, &path[0..path.len() - 1]);
+
+    if date_type.contains("month") {
+        if path.contains(".csv") {
+            formatted_path = format!("{}/{}", parent_directory, &path[0..path.len() - 1]);
+        } else {
+            formatted_path = format!("{}/{}.csv", parent_directory, &path[0..path.len() - 1]);
+        }
+    }
 
     // for user to quit prematurely
     if formatted_path.contains("q") {

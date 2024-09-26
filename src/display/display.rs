@@ -1,4 +1,6 @@
 use super::*;
+use crate::common::file_pathing;
+use crate::read_csv::CsvLines;
 
 pub fn display_file(path: String) {
     match fs::read_to_string(&path) {
@@ -8,6 +10,20 @@ pub fn display_file(path: String) {
             crate::main();
         }
     }
+}
+
+pub fn display_previous_file() {
+    let user_dir = file_pathing::user_path().unwrap();
+    let parent_dir = format!("{}/Documents/Finance/Records", user_dir);
+    let year_dir = file_pathing::user_input_pathing(parent_dir, "year");
+    let month_file = file_pathing::user_input_pathing(year_dir.unwrap(), "month").unwrap();
+
+    display_file(month_file.clone());
+
+    let mut csv_lines = utils::instantiate_csv_lines(Some(month_file));
+    let csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
+
+    display_distr(csv_fields)
 }
 
 pub fn display_distr(csv_fields: write_csv::CsvFields) {

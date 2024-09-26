@@ -1,5 +1,5 @@
 use common::{utils, Date, Pathing};
-use display::display::{display_distr, display_file};
+use display::display::*;
 use read_csv::CsvLines;
 use std::{io, process::exit};
 
@@ -12,14 +12,12 @@ fn main() {
     let path = Pathing::generate_file_path(&date, true).unwrap();
     let mut csv_lines = utils::instantiate_csv_lines(Some(path.month_path));
 
-    // TODO:
-    // display previous file
-
     loop {
         println!(
-            "\n(mf) - Modify the current file\
-        \n(df) - Display the current file\
-        \n(q)  - Quit the program\
+            "\n(mf)  - Modify the current file\
+        \n(df)  - Display the current file\
+        \n(dpf) - Display a previous file\
+        \n(q)   - Quit the program\
         \n\nOperation:"
         );
 
@@ -41,6 +39,10 @@ fn main() {
             display_file(csv_lines.file_path.clone());
             let csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
             display_distr(csv_fields)
+        }
+
+        if oper.trim() == "dpf" {
+            display_previous_file();
         }
 
         if oper.trim() == "q" {
