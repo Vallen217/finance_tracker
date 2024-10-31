@@ -67,18 +67,18 @@ pub fn display_distr(csv_fields: write_csv::CsvFields) {
     }
 
     newline = 1;
-    let g_e = csv_fields.gross_expense.last().unwrap_or(&0.0);
     let g_i = csv_fields.gross_income.last().unwrap_or(&0.0);
+    let n_i = csv_fields.net_income.last().unwrap_or(&0.0);
 
     print!(
         "\n\nIncome Distribution\nProfit: {:.2}%, ",
-        (100.0 / (g_e + g_i) * g_i)
+        (100.0 / (g_i / n_i))
     );
     for (i, val) in desc_vals.iter().enumerate() {
         let per_key = utils::get_value_key(&desc_vals[i], &values);
         newline += 1;
 
-        let per_val = (100.0 / (g_e + g_i)) * val;
+        let per_val = (100.0 / (g_i)) * val;
 
         if newline == 4 {
             newline = 0;
