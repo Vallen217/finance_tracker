@@ -32,6 +32,7 @@ impl CsvFields {
         io::stdin().read_line(&mut field_input)?;
         let no_input: bool = field_input.trim().is_empty();
 
+        // ???
         if field_input.contains("-") {
             println!("Error: Invalid input: {}", field_input);
             let sync_fields = self.date.len();
@@ -52,7 +53,7 @@ impl CsvFields {
                 let field_val: f32 = if no_input {
                     0.0
                 } else {
-                    field_input.trim().parse()?
+                    field_input.trim().parse::<f32>()?
                 };
 
                 self.expense.expense.push(field_val);
@@ -65,7 +66,7 @@ impl CsvFields {
                 let field_val: f32 = if no_input {
                     0.0
                 } else {
-                    field_input.trim().parse()?
+                    field_input.trim().parse::<f32>()?
                 };
 
                 self.income.push(field_val);

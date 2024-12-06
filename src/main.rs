@@ -45,6 +45,14 @@ fn main() {
             display_previous_file();
         }
 
+        // TODO: reoccuring expenses
+        // make a seperate csv file with expense fields and manually input dates
+        // iterate through the dates
+        // check if all reo_expense date < current date exist in the current file
+        // insert all missing entries
+        // // if the date matches the current date
+        // input it into the primary csv file
+
         if oper.trim() == "q" {
             println!("");
             exit(0);
