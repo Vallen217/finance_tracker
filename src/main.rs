@@ -2,21 +2,33 @@ use common::{utils, Date, Pathing};
 use display::display::*;
 use read_csv::CsvLines;
 use std::{io, process::exit};
+use write_csv::CsvFields;
 
 pub mod common;
 pub mod display;
 pub mod read_csv;
 pub mod write_csv;
+
 fn main() {
     let date = Date::current_date();
     let path = Pathing::generate_file_path(&date, true).unwrap();
     let mut csv_lines = utils::instantiate_csv_lines(Some(path.month_path));
+
+    // recurrent expenses
+    CsvLines::compile_csv(&mut csv_lines).unwrap();
+    let mut csv_fields = CsvLines::compile_re_exp(&mut csv_lines).unwrap();
+    CsvFields::push_re_exp(&mut csv_fields, csv_lines.file_path.clone());
+
+    // TODO:
+    // display re_exp
+    // change display_previous_file pathing to ignore re_exp
 
     loop {
         println!(
             "\n(mf)  - Modify the current file\
         \n(df)  - Display the current file\
         \n(dpf) - Display a previous file\
+        \n(dre) - Display recurrent expenses\
         \n(q)   - Quit the program\
         \n\nOperation:"
         );
@@ -27,8 +39,8 @@ fn main() {
         if oper.trim() == "mf" {
             println!(
                 "\n\n(rl#)  - Remove the last # file entry\
-                \n(q)    - Quit file modification\
-                \nPress any key to continue"
+            \n(q)    - Quit file modification\
+            \nPress any key to continue"
             );
 
             let csv_fields = CsvLines::compile_csv(&mut csv_lines).unwrap();
@@ -45,13 +57,23 @@ fn main() {
             display_previous_file();
         }
 
-        // TODO: reoccuring expenses
-        // make a seperate csv file with expense fields and manually input dates
-        // iterate through the dates
-        // check if all reo_expense date < current date exist in the current file
-        // insert all missing entries
-        // // if the date matches the current date
-        // input it into the primary csv file
+        if oper.trim() == "dre" {
+            let re_exp_path = format!(
+                "{}/Documents/Finance/Records/recurrent_expenses.csv",
+                common::file_pathing::user_path().unwrap()
+            );
+            let mut re_exp_lines = CsvLines {
+                file_path: re_exp_path.clone(),
+                lines: vec![],
+            };
+
+            CsvLines::compile_csv(&mut re_exp_lines).unwrap();
+            let mut re_exp_fields = CsvLines::compile_re_exp(&mut re_exp_lines).unwrap();
+            CsvFields::push_re_exp(&mut re_exp_fields, re_exp_lines.file_path.clone());
+
+            display_file(re_exp_path);
+            display_distr(re_exp_fields);
+        }
 
         if oper.trim() == "q" {
             println!("");

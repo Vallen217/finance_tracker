@@ -17,14 +17,23 @@ impl CsvLines {
         Ok(csv_fields)
     }
 
-    fn parse_csv_line(&mut self, mut csv_fields: CsvFields) -> CsvFields {
+    pub fn parse_csv_line(&mut self, mut csv_fields: CsvFields) -> CsvFields {
         for line in &self.lines {
             let mut iter = 0;
             for val in line {
                 let str_val = val.trim();
 
                 match iter {
-                    0 => csv_fields.date.push(str_val.to_string()),
+                    0 => {
+                        // Enforcing the date format
+                        if str_val.len() < 10 {
+                            csv_fields
+                                .date
+                                .push(Self::format_re_exp_date(str_val.to_string()));
+                        } else {
+                            csv_fields.date.push(str_val.to_string());
+                        }
+                    }
                     1 => compile_expense_field(&mut csv_fields.expense, str_val),
                     2 => csv_fields.gross_expense.push(str_to_f32(str_val)),
                     3 => csv_fields.income.push(str_to_f32(str_val)),
@@ -41,39 +50,6 @@ impl CsvLines {
 
         csv_fields
     }
-}
-
-fn str_to_f32(mut str_val: &str) -> f32 {
-    if str_val.contains("$") {
-        str_val = &str_val[1..];
-    }
-
-    let val: f32 = match str_val.parse() {
-        Ok(num) => num,
-        Err(err) => {
-            dbg!("{:?}", err);
-            panic!("Error: parsing: {}", str_val);
-        }
-    };
-
-    val
-}
-
-fn compile_expense_field(expense: &mut ExpenseFields, str_val: &str) {
-    let mut expense_vec: Vec<&str> = vec![];
-    for val in str_val.split(":") {
-        expense_vec.push(val.trim());
-    }
-
-    let expense_val_str = &expense_vec[0][1..expense_vec[0].len()];
-    let expense_val = str_to_f32(expense_val_str);
-    let commodity_val = if expense_vec[1].is_empty() {
-        String::from("")
-    } else {
-        String::from(&expense_vec[1][0..(expense_vec[1].len())])
-    };
-    expense.expense.push(expense_val);
-    expense.commodity.push(commodity_val);
 }
 
 #[cfg(test)]

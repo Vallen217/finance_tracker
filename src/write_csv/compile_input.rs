@@ -80,7 +80,7 @@ impl CsvFields {
         Ok(())
     }
 
-    fn calc_field_vals(field_vals: Vec<f32>) -> f32 {
+    pub fn calc_field_vals(field_vals: Vec<f32>) -> f32 {
         let mut agg_vals: f32 = 0.0;
         for val in field_vals {
             agg_vals += val;
