@@ -20,7 +20,6 @@ fn main() {
     CsvFields::push_re_exp(&mut csv_fields, csv_lines.file_path.clone());
 
     // TODO:
-    // display re_exp
     // change display_previous_file pathing to ignore re_exp
 
     loop {
@@ -38,7 +37,7 @@ fn main() {
 
         if oper.trim() == "mf" {
             println!(
-                "\n\n(rl#)  - Remove the last # file entry\
+                "\n\n(rl)  - Remove the last file entry\
             \n(q)    - Quit file modification\
             \nPress any key to continue"
             );

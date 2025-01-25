@@ -85,7 +85,11 @@ impl CsvLines {
         let mut re_exp_day = String::new();
 
         for val in &re_exp_line {
-            re_exp_day = val.trim().to_string();
+            re_exp_day = if val.len() > 2 {
+                val.trim()[8..].to_string()
+            } else {
+                val.trim().to_string()
+            };
             break;
         }
 
