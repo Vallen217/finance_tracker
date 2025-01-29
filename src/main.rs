@@ -21,6 +21,7 @@ fn main() {
 
     // TODO:
     // change display_previous_file pathing to ignore re_exp
+    // write unit tests for re_exp
 
     loop {
         println!(
@@ -61,17 +62,24 @@ fn main() {
                 "{}/Documents/Finance/Records/recurrent_expenses.csv",
                 common::file_pathing::user_path().unwrap()
             );
-            let mut re_exp_lines = CsvLines {
-                file_path: re_exp_path.clone(),
-                lines: vec![],
-            };
+            if common::file_pathing::file_exists(re_exp_path.clone()) {
+                let mut re_exp_lines = CsvLines {
+                    file_path: re_exp_path.clone(),
+                    lines: vec![],
+                };
 
-            CsvLines::compile_csv(&mut re_exp_lines).unwrap();
-            let mut re_exp_fields = CsvLines::compile_re_exp(&mut re_exp_lines).unwrap();
-            CsvFields::push_re_exp(&mut re_exp_fields, re_exp_lines.file_path.clone());
+                CsvLines::compile_csv(&mut re_exp_lines).unwrap();
+                let mut re_exp_fields = CsvLines::compile_re_exp(&mut re_exp_lines).unwrap();
+                CsvFields::push_re_exp(&mut re_exp_fields, re_exp_lines.file_path.clone());
 
-            display_file(re_exp_path);
-            display_distr(re_exp_fields);
+                display_file(re_exp_path);
+                display_distr(re_exp_fields);
+            } else {
+                println!(
+                    "Error: file not found: {}\nAborting operation.",
+                    re_exp_path
+                );
+            }
         }
 
         if oper.trim() == "q" {

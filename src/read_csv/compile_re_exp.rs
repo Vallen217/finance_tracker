@@ -61,6 +61,7 @@ impl CsvLines {
 
     // get the 'day' from a the last main csv line
     fn get_last_entry_day(&self) -> Result<i16, Box<dyn Error>> {
+        // println!("{:#?}", self);
         let mut last_entry_day = String::new();
         for val in self.lines.last().unwrap() {
             let val = val.trim().to_string();
@@ -101,7 +102,7 @@ impl CsvLines {
         Ok(day)
     }
 
-    // The recurring expense csv file exclusively uses days,
+    // The recurring expense csv file exclusively uses days by default,
     // not complete date formats.
     pub fn format_re_exp_date(mut re_exp_day: String) -> String {
         let date = Date::current_date();
@@ -120,10 +121,6 @@ impl CsvLines {
         };
 
         let full_date = format!("{}-{}-{}", date.year, month, re_exp_day);
-        // println!(
-        //     "FULL DATE: {:#?}\nYEAR: {:#?}\nMONTH: {:#?}\nRE_EXP_DAY: {:#?}",
-        //     full_date, date.year, date.month, re_exp_day
-        // );
         return full_date;
     }
 }

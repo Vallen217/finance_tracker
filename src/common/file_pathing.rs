@@ -6,11 +6,7 @@ impl Pathing {
             Some(dir) => dir,
             None => panic!("Error: unable to determine $HOME directory"),
         };
-        // let parent_dir = format!("{}/Documents/Finance/Records", user_dir.to_str().unwrap());
-        let parent_dir = format!(
-            "{}/Documents/Finance/Records/Test",
-            user_dir.to_str().unwrap()
-        );
+        let parent_dir = format!("{}/Documents/Finance/Records", user_dir.to_str().unwrap());
 
         let pathing = Pathing {
             year_path: format!("{parent_dir}/{}", date.year),
