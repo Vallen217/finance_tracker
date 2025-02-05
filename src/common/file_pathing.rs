@@ -1,4 +1,5 @@
 use super::*;
+use csv;
 
 impl Pathing {
     pub fn generate_file_path(date: &Date, create_file: bool) -> Result<Pathing, Box<dyn Error>> {
@@ -7,6 +8,10 @@ impl Pathing {
             None => panic!("Error: unable to determine $HOME directory"),
         };
         let parent_dir = format!("{}/Documents/Finance/Records", user_dir.to_str().unwrap());
+        // let parent_dir = format!(
+        //     "{}/Documents/Finance/Records/Test",
+        //     user_dir.to_str().unwrap()
+        // );
 
         let pathing = Pathing {
             year_path: format!("{parent_dir}/{}", date.year),
@@ -33,6 +38,17 @@ impl Pathing {
 
 pub fn file_exists(path: String) -> bool {
     path::Path::new(&path).exists()
+}
+
+pub fn empty_file(path: String) -> bool {
+    let mut empty_file = true;
+    let csv_reader = csv::ReaderBuilder::new().has_headers(true).from_path(path);
+
+    for _ in csv_reader.unwrap().records() {
+        empty_file = false;
+    }
+
+    empty_file
 }
 
 pub fn user_path() -> Result<String, Box<dyn Error>> {

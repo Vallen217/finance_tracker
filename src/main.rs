@@ -1,4 +1,4 @@
-use common::{utils, Date, Pathing};
+use common::{file_pathing, utils, Date, Pathing};
 use display::display::*;
 use read_csv::CsvLines;
 use std::{io, process::exit};
@@ -15,11 +15,15 @@ fn main() {
     let mut csv_lines = utils::instantiate_csv_lines(Some(path.month_path));
 
     // recurrent expenses
-    CsvLines::compile_csv(&mut csv_lines).unwrap();
-    let mut csv_fields = CsvLines::compile_re_exp(&mut csv_lines).unwrap();
-    CsvFields::push_re_exp(&mut csv_fields, csv_lines.file_path.clone());
+    let _ = file_pathing::empty_file(csv_lines.file_path.clone());
+    if !file_pathing::empty_file(csv_lines.file_path.clone()) {
+        // CsvLines::compile_csv(&mut csv_lines).unwrap();
+        // let mut csv_fields = CsvLines::compile_re_exp(&mut csv_lines).unwrap();
+        // CsvFields::push_re_exp(&mut csv_fields, csv_lines.file_path.clone());
+    }
 
     // TODO:
+    // write recurrent_exp.csv with with write_file
     // change display_previous_file pathing to ignore re_exp
     // write unit tests for re_exp
 
@@ -60,9 +64,9 @@ fn main() {
         if oper.trim() == "dre" {
             let re_exp_path = format!(
                 "{}/Documents/Finance/Records/recurrent_expenses.csv",
-                common::file_pathing::user_path().unwrap()
+                file_pathing::user_path().unwrap()
             );
-            if common::file_pathing::file_exists(re_exp_path.clone()) {
+            if file_pathing::file_exists(re_exp_path.clone()) {
                 let mut re_exp_lines = CsvLines {
                     file_path: re_exp_path.clone(),
                     lines: vec![],
