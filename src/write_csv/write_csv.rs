@@ -61,7 +61,7 @@ impl CsvFields {
 
             // by default the entire CsvField.expense.expense vec would be used
             // to get the gross_expense. resulting in something like this:
-            // // Expense,              Gross Expense,
+            // Expense,                 Gross Expense,
             // $0.00: ,                 $0.00,
             // $12.65: Spotify Premium, $56.65,
             // $44.00: CCW Safe,        $56.65,
@@ -73,8 +73,8 @@ impl CsvFields {
             // $12.65: Spotify Premium, $12.65,
             // $44.00: CCW Safe,        $56.65,
             let g_expense =
-                Self::calc_field_vals(self.expense.expense.clone()[0..self.income.len()].to_vec());
-            let g_income = Self::calc_field_vals(self.income.clone());
+                calc_field_vals(self.expense.expense.clone()[0..self.income.len()].to_vec());
+            let g_income = calc_field_vals(self.income.clone());
             let n_income: f32 = g_income - g_expense;
 
             self.gross_expense.push(g_expense);
@@ -85,29 +85,4 @@ impl CsvFields {
         }
         self.write_csv(path).unwrap();
     }
-}
-
-pub fn pad(word: &str, char_len: usize) -> String {
-    let spaces = char_len - word.len();
-    let padding = " ".repeat(spaces);
-    padding
-}
-
-pub fn longest_field_len(field: Vec<f32>) -> usize {
-    let mut sorted_vec = field.clone();
-    sorted_vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
-    let longest_ele_len = sorted_vec[field.len() - 1].to_string().len();
-    longest_ele_len + 5
-}
-
-pub fn longest_commodity(expense: Vec<f32>, commodity: Vec<String>) -> usize {
-    let mut longest_iter: usize = 0;
-    for i in 0..expense.len() {
-        let e_fields = format!("${:.2}: {}", expense[i], commodity[i]);
-        if e_fields.len() > longest_iter {
-            longest_iter = e_fields.len();
-        }
-    }
-
-    longest_iter + 1
 }

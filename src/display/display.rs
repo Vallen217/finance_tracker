@@ -12,6 +12,14 @@ pub fn display_file(path: String) {
     }
 }
 
+pub fn display_re_exp(path: String, re_exp_fields: write_csv::CsvFields) {
+    display_file(path);
+
+    let g_e = write_csv::calc_field_vals(re_exp_fields.expense.expense);
+
+    println!("Gross Recurrent Expenses:\n${:.2}", g_e);
+}
+
 pub fn display_previous_file() {
     let user_dir = file_pathing::user_path().unwrap();
     let parent_dir = format!("{}/Documents/Finance/Records", user_dir);

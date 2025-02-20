@@ -15,15 +15,13 @@ fn main() {
     let mut csv_lines = utils::instantiate_csv_lines(Some(path.month_path));
 
     // recurrent expenses
-    let _ = file_pathing::empty_file(csv_lines.file_path.clone());
     if !file_pathing::empty_file(csv_lines.file_path.clone()) {
-        // CsvLines::compile_csv(&mut csv_lines).unwrap();
-        // let mut csv_fields = CsvLines::compile_re_exp(&mut csv_lines).unwrap();
-        // CsvFields::push_re_exp(&mut csv_fields, csv_lines.file_path.clone());
+        CsvLines::compile_csv(&mut csv_lines).unwrap();
+        let mut csv_fields = CsvLines::compile_re_exp(&mut csv_lines).unwrap();
+        CsvFields::push_re_exp(&mut csv_fields, csv_lines.file_path.clone());
     }
 
     // TODO:
-    // write recurrent_exp.csv with with write_file
     // change display_previous_file pathing to ignore re_exp
     // write unit tests for re_exp
 
@@ -73,11 +71,9 @@ fn main() {
                 };
 
                 CsvLines::compile_csv(&mut re_exp_lines).unwrap();
-                let mut re_exp_fields = CsvLines::compile_re_exp(&mut re_exp_lines).unwrap();
-                CsvFields::push_re_exp(&mut re_exp_fields, re_exp_lines.file_path.clone());
+                let re_exp_fields = CsvLines::compile_re_exp(&mut re_exp_lines).unwrap();
 
-                display_file(re_exp_path);
-                display_distr(re_exp_fields);
+                display_re_exp(re_exp_path, re_exp_fields);
             } else {
                 println!(
                     "Error: file not found: {}\nAborting operation.",

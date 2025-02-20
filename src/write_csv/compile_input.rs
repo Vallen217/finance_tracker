@@ -14,8 +14,8 @@ impl CsvFields {
         }
         self.input_csv_field("Income: ", &path)?;
 
-        let g_expense = Self::calc_field_vals(self.expense.expense.clone());
-        let g_income = Self::calc_field_vals(self.income.clone());
+        let g_expense = calc_field_vals(self.expense.expense.clone());
+        let g_income = calc_field_vals(self.income.clone());
         let n_income: f32 = g_income - g_expense;
 
         self.gross_expense.push(g_expense);
@@ -79,20 +79,10 @@ impl CsvFields {
 
         Ok(())
     }
-
-    pub fn calc_field_vals(field_vals: Vec<f32>) -> f32 {
-        let mut agg_vals: f32 = 0.0;
-        for val in field_vals {
-            agg_vals += val;
-        }
-        agg_vals
-    }
 }
 
 #[cfg(test)]
 mod unit_tests {
-    use super::compile_input::CsvFields;
-
     #[test]
     fn test_calc_field_vals() {
         let vec_1: Vec<f32> = vec![37.09, 27.98, 65.52];
@@ -100,11 +90,11 @@ mod unit_tests {
         let expected_result_1: f32 = 130.59;
         let expected_result_2: f32 = 357.83;
 
-        let result_1 = CsvFields::calc_field_vals(vec_1);
+        let result_1 = super::calc_field_vals(vec_1);
         assert_eq!(expected_result_1, result_1);
 
         vec_2.push(result_1);
-        let result_2 = CsvFields::calc_field_vals(vec_2);
+        let result_2 = super::calc_field_vals(vec_2);
         assert_eq!(expected_result_2, result_2);
     }
 }

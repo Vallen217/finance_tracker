@@ -61,7 +61,6 @@ impl CsvLines {
 
     // get the 'day' from a the last main csv line
     fn get_last_entry_day(&self) -> Result<i16, Box<dyn Error>> {
-        // println!("{:#?}", self);
         let mut last_entry_day = String::new();
         for val in self.lines.last().unwrap() {
             let val = val.trim().to_string();
